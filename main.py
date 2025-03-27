@@ -14,10 +14,10 @@ if __name__ == "__main__":
 
     if rockets:
         print(f"Fetched {len(rockets)} rockets. Now doing the cleaning and transformations")
-        cleaned_data = transformation.clean_and_transform_rocket_data(rockets)
+        cleaned_r_data = transformation.clean_and_transform_rocket_data(rockets)
         print(f"Cleaning completed. Now uploading the data to database")
-        
-        database.bulk_insert(cleaned_data,'rockets')
+
+        # database.bulk_insert(cleaned_r_data,'rockets')
 
     launches = extractor.retrive_launch_data() #Data extraction
     if launches:
@@ -25,6 +25,6 @@ if __name__ == "__main__":
         cleaned_data = transformation.clean_and_transform_launch_data(launches)
         print(f"Cleaning completed. Now uploading the data to database")
 
-        database.bulk_insert(cleaned_data,'launches')
+    #     database.bulk_insert(cleaned_data,'launch')
     
        
