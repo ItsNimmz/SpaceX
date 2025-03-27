@@ -42,12 +42,25 @@ def clean_and_transform_rocket_data(data):
         # Convert data to DataFrame 
         df = pd.DataFrame(data)
         
+        # Fill missing success_rate_percentage with mean
+        df["success_rate_pct"] = df["success_rate_pct"].fillna(df["success_rate_pct"].mean())
+        print(df["success_rate_pct"])
         df = df.rename(columns={
             'success_rate_pct': 'success_rate_percentage'
         })
         # Extract rocket_id from the dictionary in column I
         df['diameter'] = df['diameter'].apply(lambda x: x['meters'] if isinstance(x, dict) else None)   
-        df['mass'] = df['mass'].apply(lambda x: x['kg'] if isinstance(x, dict) else None)     
+        df['mass'] = df['mass'].apply(lambda x: x['kg'] if isinstance(x, dict) else None)
+        df['height'] = df['height'].apply(lambda x: x['meters'] if isinstance(x, dict) else None)
+
+        # Convert numeric columns
+        numeric_cols = ["cost_per_launch", "diameter", "mass", "height", "success_rate_percentage"]
+        df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors="coerce")
+
+        # Convert active to boolean
+        df["active"] = df["active"].astype(bool)
+
+        df.to_excel('cleaned_rocket_data.xlsx', index=False)     
         
         return df
         

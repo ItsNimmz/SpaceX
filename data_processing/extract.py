@@ -125,6 +125,14 @@ def retrive_rocket_data():
         mass {
             kg
         }
+        height {
+            meters
+        }
+        payload_weights {
+            id
+            kg
+            name
+        }
      }
     }
     """
