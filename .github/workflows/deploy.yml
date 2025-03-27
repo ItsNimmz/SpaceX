@@ -44,7 +44,7 @@ jobs:
 
     - name: Deploy and Run Flask Application
       env:
-        FLASK_APP: api/app.py  # Path to your Flask app
+        FLASK_APP: app.py  # Path to your Flask app
         FLASK_ENV: production
       run: |
         echo "Starting Flask application..."
