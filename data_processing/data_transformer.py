@@ -3,10 +3,10 @@ from datetime import datetime
 
 # Function to Clean and Transform the data
 def clean_and_transform_launch_data(data):
-        
+
         # Convert data to DataFrame 
         df = pd.DataFrame(data)
-
+        
         # Get basic info about the dataset
         # print('Information about the dataset\n\n', df.info())
 
@@ -22,6 +22,9 @@ def clean_and_transform_launch_data(data):
         # Remove the timezone information (make datetime timezone-unaware)
         df['launch_date_utc'] = df['launch_date_utc'].dt.tz_localize(None)
 
+        # Replace NaN values in the 'details' column with a default value, e.g., 'No details available'
+        df['details'] = df['details'].fillna('No details available')
+
         # Drop columns where all values are NaN (empty columns)
         df = df.dropna(axis=1, how='all')
 
@@ -35,6 +38,18 @@ def clean_and_transform_launch_data(data):
 
         return df
         
+def clean_and_transform_rocket_data(data):
+        # Convert data to DataFrame 
+        df = pd.DataFrame(data)
+        
+        df = df.rename(columns={
+            'success_rate_pct': 'success_rate_percentage'
+        })
+        # Extract rocket_id from the dictionary in column I
+        df['diameter'] = df['diameter'].apply(lambda x: x['meters'] if isinstance(x, dict) else None)   
+        df['mass'] = df['mass'].apply(lambda x: x['kg'] if isinstance(x, dict) else None)     
+        
+        return df
         
 
 

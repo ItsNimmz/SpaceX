@@ -38,43 +38,13 @@ def fetch_graphql_data(query, variables=None, headers=None):
         return None
 
 
-def fetch_batched_data_with_rate_limiting():
+def fetch_batched_data_with_rate_limiting(query, data_type):
     
     # GraphQL query with limit and offset for batch processing
-    query = """
-    query($limit: Int!, $offset: Int!) {
-      launches(limit: $limit, offset: $offset) {
-        mission_name
-        launch_date_utc
-        launch_success
-        launch_year
-        launch_site {
-        site_id
-        site_name_long
-        site_name
-        }
-        details
-        rocket {
-            rocket_name
-            rocket_type
-        }
-    }
-        payloads {
-            id
-            nationality
-            payload_mass_kg
-            payload_type
-            manufacturer
-            payload_mass_lbs
-            customers
-            reused
-        }
-    }
-    """
     
     limit = 100  # Number of launches per batch
-    offset = 0  # Start with the first batch of data
-    all_launches = []
+    offset = 0 # Start with the first batch of data
+    all_data = []
     
     # Rate limiting: maximum requests per minute (60 requests)
     rate_limit_per_minute = 60
@@ -87,12 +57,12 @@ def fetch_batched_data_with_rate_limiting():
         # Call the fetch_graphql_data function
         data = fetch_graphql_data( query, variables)
         
-        if data and 'launches' in data['data']:
-            launches = data['data']['launches']
-            all_launches.extend(launches)
+        if data and data_type in data['data']:
+            data_list = data['data'][data_type]
+            all_data.extend(data_list)
             
             # If the number of results is less than the limit, we have reached the last page
-            if len(launches) < limit:
+            if len(data_list) < limit:
                 break
 
             # Update the offset to get the next batch of data
@@ -105,6 +75,59 @@ def fetch_batched_data_with_rate_limiting():
         # Sleep to respect rate limit: wait a bit before making the next request
         time.sleep(delay_between_requests)  # Delay to avoid rate-limiting
 
-    return all_launches
+    return all_data
 
 
+def retrive_launch_data():
+    query = """
+    query($limit: Int!, $offset: Int!) {
+      launches(limit: $limit, offset: $offset) {
+        id
+        mission_id
+        mission_name
+        launch_date_utc
+        launch_year
+        launch_success
+        details
+        launch_site {
+         site_id
+        }
+        rocket {
+            rocket {
+                id
+            }
+        }
+     }
+    }
+    """
+    data = fetch_batched_data_with_rate_limiting(query,'launches')
+    return data
+
+
+def retrive_rocket_data():
+    query = """
+    query($limit: Int!, $offset: Int!) {
+      rockets(limit: $limit, offset: $offset) {
+        id
+        name
+        active
+        company
+        cost_per_launch
+        country
+        description
+        first_flight
+        stages
+        success_rate_pct
+        type
+        diameter {
+            meters
+        }
+        mass {
+            kg
+        }
+     }
+    }
+    """
+    data = fetch_batched_data_with_rate_limiting(query,'rockets')
+    return data
+    
