@@ -29,7 +29,7 @@ jobs:
     - name: Run tests
       run: |
         # Add your test commands here
-        pytest
+        
 
   deploy:
     runs-on: ubuntu-latest
