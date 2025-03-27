@@ -71,14 +71,13 @@ def fetch_batched_data_with_rate_limiting(query, data_type):
         else:
             print("No data received or error occurred.")
             break
-        
         # Sleep to respect rate limit: wait a bit before making the next request
         time.sleep(delay_between_requests)  # Delay to avoid rate-limiting
-
+   
     return all_data
 
 
-def retrive_launch_data():
+def retrive_data():
     query = """
     query($limit: Int!, $offset: Int!) {
       launches(limit: $limit, offset: $offset) {
@@ -90,12 +89,35 @@ def retrive_launch_data():
         launch_success
         details
         launch_site {
-         site_id
+            site_id
         }
         rocket {
             rocket {
                 id
+                company
+                cost_per_launch
+                country
+                description
+                diameter {
+                    meters
+                }
+                height {
+                    meters
+                }
+                mass {
+                    kg
+                }
+                name
+                payload_weights {
+                    id
+                    kg
+                    name
+                }
+                success_rate_pct
+                active
             }
+            rocket_name
+            rocket_type
         }
      }
     }
@@ -104,38 +126,3 @@ def retrive_launch_data():
     return data
 
 
-def retrive_rocket_data():
-    query = """
-    query($limit: Int!, $offset: Int!) {
-      rockets(limit: $limit, offset: $offset) {
-        id
-        name
-        active
-        company
-        cost_per_launch
-        country
-        description
-        first_flight
-        stages
-        success_rate_pct
-        type
-        diameter {
-            meters
-        }
-        mass {
-            kg
-        }
-        height {
-            meters
-        }
-        payload_weights {
-            id
-            kg
-            name
-        }
-     }
-    }
-    """
-    data = fetch_batched_data_with_rate_limiting(query,'rockets')
-    return data
-    

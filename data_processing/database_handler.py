@@ -2,6 +2,8 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Date, ForeignKey, Numeric, Float, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
+import pandas as pd
+import logging
 
 # Base class for all models
 Base = declarative_base()
@@ -12,11 +14,11 @@ class Rocket(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     rocket_id = Column(String, unique=True, nullable=False)
-    rocket_name = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    active = Column(String, nullable=True, default=False)  # Current status
     country = Column(String, nullable=False)
     description = Column(String, nullable=True)
     first_flight = Column(Date, nullable=True)  # Date of first launch
-    active = Column(String, nullable=True, default=False)  # Current status
     type = Column(String, nullable=True)  # Rocket type/family
     cost_per_launch = Column(Numeric, nullable=True)
     diameter = Column(Float, nullable=True)  # Diameter in meters
@@ -60,6 +62,42 @@ def get_session():
     Session = sessionmaker(bind=engine)
     return Session()
 
+def test():
+    df = pd.read_excel('cleaned_rocket_data.xlsx')
+
+    DATABASE_URL = 'sqlite:///spacexv1.db'  # SQLite for simplicity (can be changed to other DBs)
+    engine = create_engine(DATABASE_URL, echo=True)    
+    # 3. Create session with optimized settings
+    Session = sessionmaker(
+        bind=engine,
+        autoflush=False,
+        expire_on_commit=False
+    )
+    session = Session()
+
+    # 4. Bulk insert using dictionary mapping
+    records = df.to_dict('records')
+    
+    # Batch processing for large datasets
+    batch_size = 1000
+    for i in range(0, len(records), batch_size):
+        print('\n')
+        print('\n')
+        print('-------------------')
+        batch = records[i:i + batch_size]
+        session.bulk_insert_mappings(
+            Rocket,
+            batch,
+            return_defaults=False,
+            render_nulls=True
+        )
+        session.flush()  # Partial commits for each batch
+        print(f"Processed batch {i//batch_size + 1}")
+
+    session.commit()
+    print(f"Successfully inserted {len(df)} records")
+
+    return 'k'
 
 def bulk_insert(df, table_name: str):
         """ Bulk insert data from DataFrame into a specified table. """
