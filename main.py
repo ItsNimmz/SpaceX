@@ -2,12 +2,12 @@
 import data_processing.extract as extractor
 # from data_processing.database_handler import create_tables, bulk_insert, Rocket, Launch
 import data_processing.data_transformer as transformation
-import data_processing.database_handler as database
-
+import data_processing.database as database
 
 
 # Example usage
 if __name__ == "__main__":
+    
     database.create_tables()
 
     rockets = extractor.retrive_rocket_data() #Data extraction
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         cleaned_r_data = transformation.clean_and_transform_rocket_data(rockets)
         print(f"Cleaning completed. Now uploading the data to database")
 
-        # database.bulk_insert(cleaned_r_data,'rockets')
+        database.insert_to_database(cleaned_r_data,'rockets')
 
     launches = extractor.retrive_launch_data() #Data extraction
     if launches:
