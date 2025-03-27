@@ -3,3 +3,4 @@ mysql-connector-python
 flask-cors
 gunicorn
 psycopg2
+python-dotenv
