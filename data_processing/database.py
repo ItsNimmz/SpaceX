@@ -5,7 +5,7 @@ import psycopg2
 current_dir = os.path.dirname(__file__)
 folder_path = os.path.join(current_dir, 'data')
 
-HOST = os.getenv('DATABASE_URL') 
+HOST = os.getenv('DATABASE_URL')  
 
 
 engine = create_engine(HOST)
