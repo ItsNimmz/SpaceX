@@ -29,7 +29,7 @@ jobs:
     - name: Run tests
       run: |
         # Add your test commands here
-        
+        pytest
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,14 +42,14 @@ jobs:
       run: |
         curl -X POST -H "Content-Type: application/json" -d '{"status": "deploying"}' $DEPLOYMENT_WEBHOOK_URL
 
-    - name: Deploy application
+    - name: Deploy and Run Flask Application
       env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        FLASK_APP: api/app.py  # Path to your Flask app
+        FLASK_ENV: production
       run: |
-        # Add deployment commands here
-        echo "Deploying application..."
-        # Example: SSH into a server or trigger a deployment script
-        ssh user@your-server "cd /path/to/app && git pull && systemctl restart your-app"
+        echo "Starting Flask application..."
+        cd api
+        python -m flask run --host=0.0.0.0 --port=5000 &
 
     - name: Notify deployment success
       env:
