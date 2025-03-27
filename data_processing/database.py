@@ -5,9 +5,9 @@ import psycopg2
 current_dir = os.path.dirname(__file__)
 folder_path = os.path.join(current_dir, 'data')
 
-HOST = "postgresql://space_x_v1_user:HnphvMLlpStdnaghN8TuOtNOGz6PVX0s@dpg-cvhpqhggph6c73ce9of0-a.oregon-postgres.render.com/space_x_v1"  # Change if your database is hosted remotely
+HOST = os.getenv('DATABASE_URL') 
 
-# Create MySQL database connection using SQLAlchemy
+
 engine = create_engine(HOST)
 
 def create_tables():
@@ -62,16 +62,16 @@ def create_tables():
         """
         ]
     try:
-        # Establish the connection to PostgreSQL
+        
         conn = psycopg2.connect(HOST)
         cur = conn.cursor()
         
-        # Execute each query
+        
         for query in queries:
-            cur.execute(query)  # Execute the SQL statement
+            cur.execute(query)  
             print("Query executed successfully.")
         
-        # Commit the changes and close the connection
+        
         conn.commit()
         cur.close()
         conn.close()
@@ -97,23 +97,12 @@ def insert_to_database(df, table_name):
         print("Data inserted successfully into the table.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
-    # Remove later
-    print('\n')
-    print('\n')
-    print('\n')
-    print('------------------------table_name----------------------',table_name)
-    with engine.begin() as conn:
-        test = conn.execute(text(f"SELECT COUNT(*) FROM {table_name}"))
-        rows = test.fetchall()
-        for row in rows:
-            print(row)
     return True
 
 def load_payload(cleaned_data):
     payload_data = []
     for index, row in cleaned_data.iterrows():
-        if isinstance(row['payload_data'], list):  # Ensure payload_data is a list
+        if isinstance(row['payload_data'], list): 
             for payload in row['payload_data']:
                 payload_data.append({
                     "payload_id": payload.get("id"),
