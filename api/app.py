@@ -74,7 +74,7 @@ def get_launch_stats():
 
 @app.route('/api/test', methods=['GET'])
 def deployment_test():
-    return jsonify({'message': 'Deployment successful! The Flask app is running.'}), 200
+    return jsonify({'message': 'Deployment successful! The Flask app is running.>>>'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
