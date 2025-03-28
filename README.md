@@ -147,17 +147,13 @@ Use [http://localhost:5000/api/test](http://localhost:5000/api/test) for testing
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-repo/spacex-data-pipeline.git
-   cd spacex-data-pipeline
+   git clone https://github.com/ItsNimmz/SpaceX.git
+   cd SpaceX
    ```
 
 2. Create a `.env` file with the following variables:
 
    ```env
-   MYSQL_HOST=localhost
-   MYSQL_USER=root
-   MYSQL_PASSWORD=root
-   MYSQL_DB=spacexv1
    SPACEX_API_URL=https://spacex-production.up.railway.app/
    DATABASE_URL=postgresql://<user>:<password>@<host>/<database>
    ```
