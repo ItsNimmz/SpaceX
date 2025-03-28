@@ -177,7 +177,20 @@ Use [http://localhost:5000/api/test](http://localhost:5000/api/test) for testing
    ```
 
 ---
+## Potential Improvements
 
+Here are some potential improvements to enhance the project:
+
+1. **Set a Cron Job for the ETL Pipeline**:  
+   Automate the ETL pipeline to run at regular intervals using a cron job or a task scheduler like `cron` (Linux) or Task Scheduler (Windows). This ensures the database is always up-to-date with the latest SpaceX data.
+
+2. **Batch Insert for Database Loading**:  
+   Optimize the database loading process by implementing batch inserts. This will improve performance when inserting large amounts of data into the database.
+
+3. **Unit Testing**:  
+   Add unit tests for the ETL pipeline and API endpoints to ensure code reliability and catch potential bugs early. Use a testing framework like `pytest` for this purpose.
+
+---
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
