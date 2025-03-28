@@ -70,12 +70,20 @@ The database schema consists of the following tables:
 +------------------+       +------------------+       +------------------+
 |     Rockets      |       |     Launches     |       |     Payloads     |
 +------------------+       +------------------+       +------------------+
-| rocket_id (PK)   |<----->| launch_id (PK)   |<----->| payload_id (PK)  |
-| name             |       | rocket_id (FK)   |       | launch_id (FK)   |
-| type             |       | date             |       | type             |
-| active           |       | success          |       | weight           |
-+------------------+       +------------------+       | orbit            |
-                                                      +------------------+
+| rocket_id (PK)   |<----->| mission_id (PK)  |<----->| payload_id (PK)  |
+| name             |       | mission_name     |       | name             |
+| type             |       | launch_date_utc  |       | kg               |
+| company          |       | launch_year      |       | mission_id (FK)  |
+| description      |       | details          |       | rocket_id (FK)   |
+| first_flight     |       | rocket_id (FK)   |       +------------------+
+| cost_per_launch  |       +------------------+
+| diameter_meters  |
+| mass_kg          |
+| height_meters    |
+| success_rate_%   |
+| country          |
+| active           |
++------------------+
 ```
 
 ### How to Run the ETL Pipeline
