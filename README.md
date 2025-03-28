@@ -1,12 +1,44 @@
-# SpaceX Data Pipeline and API
+# SpaceX Data Pipeline and API 🚀
 
 This project is a data pipeline and API for processing and serving SpaceX-related data. It consists of two main components: an ETL (Extract, Transform, Load) pipeline and a Flask-based REST API.
 
 ---
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [ETL Pipeline](#etl-pipeline)
+  - [Data Source](#data-source)
+  - [ETL Approach](#etl-approach)
+  - [Database Schema](#database-schema)
+  - [How to Run the ETL Pipeline](#how-to-run-the-etl-pipeline)
+- [Flask API](#flask-api)
+  - [Endpoints](#endpoints)
+  - [How to Run the Flask API](#how-to-run-the-flask-api)
+- [Technologies Used](#technologies-used)
+- [Setup Instructions](#setup-instructions)
+- [License](#license)
+
+---
+
+## Overview
+
+This project automates the process of fetching, cleaning, transforming, and storing SpaceX data into a PostgreSQL database. It also provides a REST API to query and retrieve processed data.
+
+---
+
+## Features
+
+- **ETL Pipeline**: Fetches data from the SpaceX GraphQL API, cleans and transforms it, and loads it into a database.
+- **REST API**: Exposes endpoints to query launch statistics, rocket data, and payload contributions.
+- **Database Integration**: Uses PostgreSQL for efficient data storage and querying.
+- **Modular Design**: Cleanly separated ETL and API components for maintainability.
+
+---
+
 ## ETL Pipeline
 
-The ETL pipeline is responsible for fetching, cleaning, transforming, and loading SpaceX data into a PostgreSQL database. Below is a detailed explanation of the ETL process:
+The ETL pipeline is responsible for fetching, cleaning, transforming, and loading SpaceX data into a PostgreSQL database.
 
 ### Data Source
 - The data is fetched from the **SpaceX GraphQL API** available at:  
@@ -34,12 +66,6 @@ The ETL pipeline is responsible for fetching, cleaning, transforming, and loadin
 
 The database schema consists of the following tables:
 
-- **Rockets**: Stores information about rockets, such as name, type, and active status.
-- **Launches**: Stores details about launches, including date, success status, and associated rocket.
-- **Payloads**: Stores payload details, such as type, weight, and orbit.
-
-Below is a diagram of the database schema:
-
 ```plaintext
 +------------------+       +------------------+       +------------------+
 |     Rockets      |       |     Launches     |       |     Payloads     |
@@ -50,10 +76,9 @@ Below is a diagram of the database schema:
 | active           |       | success          |       | weight           |
 +------------------+       +------------------+       | orbit            |
                                                       +------------------+
-
-
 ```
-# How to Run the ETL Pipeline
+
+### How to Run the ETL Pipeline
 
 The ETL pipeline is executed via the `main.py` script. It performs the following:
 
@@ -62,51 +87,101 @@ The ETL pipeline is executed via the `main.py` script. It performs the following
 3. Cleans and transforms the data.
 4. Loads the data into the database.
 
-
-
-## To run the pipeline:
+To run the pipeline:
 
 ```bash
-python [main.py](http://_vscodecontentref_/0)
+python main.py
 ```
 
-# Flask API
+---
 
-The Flask API provides endpoints to query and retrieve processed SpaceX data from the database. It is implemented in `api/app.py` and exposes the following endpoints:
+## Flask API
 
-## Endpoints
+The Flask API provides endpoints to query and retrieve processed SpaceX data from the database. It is implemented in [`api/app.py`](api/app.py).
 
-### `GET /api/launches/stats`
+### Endpoints
 
-Returns yearly launch statistics and rocket statistics.  
-Data is fetched using the `fetch_yearly_stats` and `fetch_rocket_stats` functions in `api/database.py`.
+- **`GET /api/launches/stats`**  
+  Returns yearly launch statistics and rocket statistics.  
+  Data is fetched using the `fetch_yearly_stats` and `fetch_rocket_stats` functions in [`api/database.py`](api/database.py).
 
-### `GET /api/metrix`
+- **`GET /api/metrix`**  
+  Returns payload contribution by rocket, launch frequencies, and total launches.  
+  Data is fetched using the `fetch_payload_contribution_by_rocket` and `fetch_launch_frequencies` functions in [`api/database.py`](api/database.py).
 
-Returns payload contribution by rocket, launch frequencies, and total launches.  
-Data is fetched using the `fetch_payload_contribution_by_rocket` and `fetch_launch_frequencies` functions in `api/database.py`.
+- **`GET /api/test`**  
+  A test endpoint to verify that the API is running successfully.
 
-### `GET /api/test`
-
-A test endpoint to verify that the API is running successfully.
-
-
-# How to Run the Flask API
+### How to Run the Flask API
 
 1. Install the required dependencies from `requirements.txt`:
 
    ```bash
    pip install -r requirements.txt
-```
-   
+   ```
+
 2. Start the Flask server:
 
    ```bash
    python api/app.py
    ```
 
-The API will be available at [http://localhost:5000](http://localhost:5000).
-
+The API will be available at [http://localhost:5000](http://localhost:5000).  
 Use [http://localhost:5000/api/test](http://localhost:5000/api/test) for testing the API setup.
 
+---
 
+## Technologies Used
+
+- **Python**: Core programming language for the ETL pipeline and API.
+- **Flask**: Web framework for building the REST API.
+- **PostgreSQL**: Database for storing processed SpaceX data.
+- **SQLAlchemy**: ORM for database interactions.
+- **Pandas**: Data manipulation and transformation.
+- **GraphQL**: API for fetching SpaceX data.
+
+---
+
+## Setup Instructions
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-repo/spacex-data-pipeline.git
+   cd spacex-data-pipeline
+   ```
+
+2. Create a `.env` file with the following variables:
+
+   ```env
+   MYSQL_HOST=localhost
+   MYSQL_USER=root
+   MYSQL_PASSWORD=root
+   MYSQL_DB=spacexv1
+   SPACEX_API_URL=https://spacex-production.up.railway.app/
+   DATABASE_URL=postgresql://<user>:<password>@<host>/<database>
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run the ETL pipeline:
+
+   ```bash
+   python main.py
+   ```
+
+5. Start the Flask API:
+
+   ```bash
+   python api/app.py
+   ```
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
