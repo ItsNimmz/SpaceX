@@ -49,10 +49,10 @@ Below is a diagram of the database schema:
 | type             |       | date             |       | type             |
 | active           |       | success          |       | weight           |
 +------------------+       +------------------+       | orbit            |
-                                                    +------------------+
+                                                      +------------------+
 
 
-
+```
 # How to Run the ETL Pipeline
 
 The ETL pipeline is executed via the `main.py` script. It performs the following:
@@ -68,7 +68,7 @@ The ETL pipeline is executed via the `main.py` script. It performs the following
 
 ```bash
 python [main.py](http://_vscodecontentref_/0)
-
+```
 
 # Flask API
 
@@ -97,11 +97,13 @@ A test endpoint to verify that the API is running successfully.
 
    ```bash
    pip install -r requirements.txt
-
+```
+   
 2. Start the Flask server:
 
    ```bash
    python api/app.py
+   ```
 
 The API will be available at [http://localhost:5000](http://localhost:5000).
 
