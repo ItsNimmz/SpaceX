@@ -16,9 +16,6 @@ def get_launch_stats():
         yearly_stats = db.fetch_yearly_stats()
         rocket_stats = db.fetch_rocket_stats()
 
-        # Return both datasets in a single JSON response
-
-        # Return both datasets in a single JSON response
         return jsonify({
             'yearly_stats': yearly_stats,
             'rocket_stats': rocket_stats
@@ -36,9 +33,6 @@ def get_metrix():
 
         total_launches = sum(item['total_launches'] for item in launch_frequencies)
         
-        # Return both datasets in a single JSON response
-
-        # Return both datasets in a single JSON response
         return jsonify({
             'payload_contribution': payload_contribution,
             'launch_frequencies': launch_frequencies,

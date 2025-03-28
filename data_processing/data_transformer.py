@@ -4,12 +4,8 @@ from datetime import datetime
 # Function to Clean and Transform the data
 def clean_and_transform_data(data):
 
-        # Convert data to DataFrame 
         df = pd.DataFrame(data)
         df.to_excel('metadata.xlsx', index=False)
-
-        # Get basic info about the dataset
-        # print('Information about the dataset\n\n', df.info())
 
         # Convert mission_id from list to string
         df['mission_id'] = df['mission_id'].apply(lambda x: x[0] if isinstance(x, list) else x)
@@ -30,9 +26,6 @@ def clean_and_transform_data(data):
 
         # Extract payload weights from the nested structure
         df['payload_data'] = df['rocket'].apply(lambda x: x['rocket']['payload_weights'] if isinstance(x, dict) and 'rocket' in x and isinstance(x['rocket'], dict) else None)
-        # df['payload_id'] = df['payload_weights'].apply(lambda payloads: ', '.join([p['id'] for p in payloads]) if isinstance(payloads, list) else None)
-        # df['payload_names'] = df['payload_weights'].apply(lambda payloads: ', '.join([p['name'] for p in payloads]) if isinstance(payloads, list) else None)
-        # df['payload_weights'] = df['rocket'].apply(lambda x: x['rocket']['payload_weights'] if isinstance(x, dict) and 'rocket' in x and isinstance(x['rocket'], dict) else None)
     
         #  Convert launch_date_utc to datetime
         df['launch_date_utc'] = pd.to_datetime(df['launch_date_utc'])
@@ -56,7 +49,7 @@ def clean_and_transform_data(data):
         return df
         
 def clean_and_transform_rocket_data(data):
-        # Convert data to DataFrame 
+        
         df = pd.DataFrame(data)
         
         # Fill missing success_rate_percentage with mean
@@ -71,11 +64,10 @@ def clean_and_transform_rocket_data(data):
         df['mass'] = df['mass'].apply(lambda x: x['kg'] if isinstance(x, dict) else None)
         df['height'] = df['height'].apply(lambda x: x['meters'] if isinstance(x, dict) else None)
 
-        # Convert numeric columns
+        
         numeric_cols = ["cost_per_launch", "diameter", "mass", "height", "success_rate_percentage"]
         df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors="coerce")
 
-        # Convert active to boolean
         df["active"] = df["active"].astype(bool)
 
         df.to_excel('cleaned_rocket_data.xlsx', index=False)     

@@ -22,14 +22,14 @@ def fetch_graphql_data(query, variables=None, headers=None):
             headers=headers,
             json=payload
             )
-        response.raise_for_status()  # Raise HTTPError for bad responses
+        response.raise_for_status()  
         response_data = response.json()
         
         # Check for GraphQL errors in the response
         if 'errors' in response_data:
             print(f"GraphQL errors: {response_data['errors']}")
             return None
-        return response.json()  # Return the data part of the response
+        return response.json()  
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         return None
@@ -42,8 +42,8 @@ def fetch_batched_data_with_rate_limiting(query, data_type):
     
     # GraphQL query with limit and offset for batch processing
     
-    limit = 100  # Number of launches per batch
-    offset = 0 # Start with the first batch of data
+    limit = 100  
+    offset = 0 
     all_data = []
     
     # Rate limiting: maximum requests per minute (60 requests)
